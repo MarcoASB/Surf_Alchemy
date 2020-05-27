@@ -1,6 +1,6 @@
 # Surfs Up!
 
-![surfs-up.png](Images/surfs-up.png)
+![surfs-up.png](surfs-up.png)
 
 Climate Analysis for a holiday vacation in Honolulu, Hawaii!
 
