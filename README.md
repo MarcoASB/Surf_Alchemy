@@ -1,5 +1,5 @@
-# Surfs Up!
-## Climate Analysis for a holiday vacation in Honolulu, Hawaii!
+# Surfs Up! :ocean: :palm_tree: :volcano:
+## Climate Analysis for a holiday vacation in Honolulu, Hawaii! :hibiscus:
 
 ![surfs-up.png](surfs-up.png)
 
