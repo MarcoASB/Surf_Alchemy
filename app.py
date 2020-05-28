@@ -34,8 +34,9 @@ def welcome():
         f"/api/v1.0/stations<br/>"
         f"Temperature observations:<br/>"
         f"/api/v1.0/temp_obs<br/>"
-        f"Stations:<br/>"
-        f"Stations:<br/>"
+        f"Precipitation:<br/>"
+        f"/api/v1.0/precipitation<br/>"
+        f":<br/>"
     )
 
 # Stations route
@@ -47,6 +48,7 @@ def stations():
     stations = list(np.ravel(results))
     return jsonify(stations)
 
+# Tobs route
 @app.route("/api/v1.0/temp_obs")
 def temp_monthly():
     """Return the temperature observations (tobs) for previous year of the most active station."""
@@ -61,6 +63,19 @@ def temp_monthly():
     # Return the results
     return jsonify(temps)
 
+
+# Precipitation route
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    """Return the precipitation data for the last year"""
+    # Calculate the date 1 year ago from last date in database
+    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+    # Query for the date and precipitation for the last year
+    precipitation = session.query(Measurement.date, Measurement.prcp).\
+        filter(Measurement.date >= prev_year).all()
+    # Dict with date as the key and prcp as the value
+    precip = {date: prcp for date, prcp in precipitation}
+    return jsonify(precip)
 
 
 
