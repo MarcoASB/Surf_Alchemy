@@ -30,7 +30,12 @@ def welcome():
     return (
         f"Welcome to the Hawaii Climate Analysis API!<br/>"
         f"Available Routes:<br/>"
+        f"Stations:<br/>"
         f"/api/v1.0/stations<br/>"
+        f"Temperature observations:<br/>"
+        f"/api/v1.0/temp_obs<br/>"
+        f"Stations:<br/>"
+        f"Stations:<br/>"
     )
 
 # Stations route
@@ -42,6 +47,19 @@ def stations():
     stations = list(np.ravel(results))
     return jsonify(stations)
 
+@app.route("/api/v1.0/temp_obs")
+def temp_monthly():
+    """Return the temperature observations (tobs) for previous year of the most active station."""
+    # Calculate the date 1 year ago from last date in database
+    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+    # Query the primary station for all tobs from the last year
+    results = session.query(Measurement.tobs).\
+        filter(Measurement.station == 'USC00519281').\
+        filter(Measurement.date >= prev_year).all()
+    # Unravel results into a 1D array and convert to a list
+    temps = list(np.ravel(results))
+    # Return the results
+    return jsonify(temps)
 
 
 
@@ -49,5 +67,6 @@ def stations():
 
 
 
-
+if __name__ == '__main__':
+    app.run()
 
