@@ -20,3 +20,14 @@ Measurement = Base.classes.measurement
 Station = Base.classes.station
 # Create our session (link) from Python to the DB
 session = Session(engine)
+
+# Flask Set Up
+app = Flask(__name__)
+
+# Flask Routes
+@app.route("/")
+def welcome():
+    return (
+        f"Welcome to the Hawaii Climate Analysis API!<br/>"
+        f"Available Routes:<br/>"
+    )
