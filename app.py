@@ -36,7 +36,8 @@ def welcome():
         f"/api/v1.0/temp_obs<br/>"
         f"Precipitation:<br/>"
         f"/api/v1.0/precipitation<br/>"
-        f":<br/>"
+        f"Date range:<br/>"
+        f"/api/v1.0/temp/start/end"
     )
 
 # Stations route
@@ -77,10 +78,26 @@ def precipitation():
     precip = {date: prcp for date, prcp in precipitation}
     return jsonify(precip)
 
-
-
-
-
+@app.route("/api/v1.0/temp/<start>")
+@app.route("/api/v1.0/temp/<start>/<end>")
+def stats(start='2016-06-01', end='2016-06-20'):
+    """Return TMIN, TAVG, TMAX."""
+    # Select statement
+    sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+    if not end:
+        # calculate TMIN, TAVG, TMAX for dates greater than start
+        results = session.query(*sel).\
+            filter(Measurement.date >= start).all()
+        # Unravel results into a 1D array and convert to a list
+        temps = list(np.ravel(results))
+        return jsonify(temps)
+    # calculate TMIN, TAVG, TMAX with start and stop
+    results = session.query(*sel).\
+        filter(Measurement.date >= start).\
+        filter(Measurement.date <= end).all()
+    # Unravel results into a 1D array and convert to a list
+    temps = list(np.ravel(results))
+    return jsonify(temps)
 
 if __name__ == '__main__':
     app.run()
